@@ -19,7 +19,6 @@ import os
 import tarfile
 
 import numpy as np
-import resource
 from os import path as osp
 from pathlib import Path
 import atexit
@@ -137,6 +136,7 @@ def get_saving_parameters(config):
 
 def set_hard_limit_num_open_files():
     if "linux" in sys.platform:
+        import resource
         _, high = resource.getrlimit(resource.RLIMIT_NOFILE)
         resource.setrlimit(resource.RLIMIT_NOFILE, (high, high))
 
