@@ -136,8 +136,9 @@ def get_saving_parameters(config):
 
 
 def set_hard_limit_num_open_files():
-    _, high = resource.getrlimit(resource.RLIMIT_NOFILE)
-    resource.setrlimit(resource.RLIMIT_NOFILE, (high, high))
+    if "linux" in sys.platform:
+        _, high = resource.getrlimit(resource.RLIMIT_NOFILE)
+        resource.setrlimit(resource.RLIMIT_NOFILE, (high, high))
 
 
 def set_memory_growth(devices):
