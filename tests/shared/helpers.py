@@ -44,14 +44,25 @@ def create_venv_with_nncf(tmp_path: Path, package_type: str, venv_type: str, ext
     venv_path = tmp_path / 'venv'
     venv_path.mkdir()
 
-    python_executable_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/python'
-    pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
+    print(sys.platform)
+
+    if "linux" in sys.platform:
+        python_executable_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/python'
+        pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
+
+    if "win32" in sys.platform:
+        python_executable_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\python'
+        pip_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\pip'
 
     version_string = f'{sys.version_info[0]}.{sys.version_info[1]}'
+
+    print(venv_type)
+
     if venv_type == 'virtualenv':
         subprocess.check_call(f'virtualenv -ppython{version_string} {venv_path}', shell=True)
     elif venv_type == 'venv':
-        subprocess.check_call(f'python{version_string} -m venv {venv_path}', shell=True)
+        subprocess.check_call(f'python -m venv {venv_path}', shell=True)
+
     subprocess.check_call(f'{pip_with_venv} install --upgrade pip', shell=True)
     subprocess.check_call(f'{pip_with_venv} install wheel', shell=True)
 

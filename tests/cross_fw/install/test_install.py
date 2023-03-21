@@ -17,6 +17,7 @@ from typing import List
 from pathlib import Path
 import shutil
 import os
+import sys
 
 from tests.shared.paths import PROJECT_ROOT
 from tests.shared.paths import TEST_ROOT
@@ -27,8 +28,13 @@ def run_install_checks(venv_path: Path, tmp_path: Path, package_type: str, backe
     if install_type.lower() not in ['cpu', 'gpu']:
         raise RuntimeError("Unknown installation mode - must be either 'cpu' or 'gpu'")
 
-    python_executable_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/python'
-    pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
+    if "linux" in sys.platform:
+        python_executable_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/python'
+        pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
+
+    if "win32" in sys.platform:
+        python_executable_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\python'
+        pip_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\pip'
 
 
     if package_type in ['build_s', 'build_w']:
