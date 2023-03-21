@@ -51,8 +51,8 @@ def create_venv_with_nncf(tmp_path: Path, package_type: str, venv_type: str, ext
         pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
 
     if "win32" in sys.platform:
-        python_executable_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\python'
-        pip_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\pip'
+        python_executable_with_venv = f' {venv_path}\\Scripts\\activate && python'
+        pip_with_venv = f' {venv_path}\\Scripts\\activate && pip'
 
     version_string = f'{sys.version_info[0]}.{sys.version_info[1]}'
 
@@ -64,7 +64,7 @@ def create_venv_with_nncf(tmp_path: Path, package_type: str, venv_type: str, ext
         subprocess.check_call(f'python -m venv {venv_path}', shell=True)
 
     subprocess.check_call(f'{pip_with_venv} install --upgrade pip', shell=True)
-    subprocess.check_call(f'{pip_with_venv} install wheel setuptools', shell=True)
+    subprocess.check_call(f'{pip_with_venv} install --upgrade wheel setuptools==59.5.0', shell=True)
 
     if package_type in ['build_s', 'build_w']:
         subprocess.check_call(f'{pip_with_venv} install build', shell=True)

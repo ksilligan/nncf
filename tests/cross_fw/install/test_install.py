@@ -33,8 +33,8 @@ def run_install_checks(venv_path: Path, tmp_path: Path, package_type: str, backe
         pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
 
     if "win32" in sys.platform:
-        python_executable_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\python'
-        pip_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\pip'
+        python_executable_with_venv = f' {venv_path}\\Scripts\\activate && python'
+        pip_with_venv = f' {venv_path}\\Scripts\\activate && pip'
 
 
     if package_type in ['build_s', 'build_w']:
@@ -131,7 +131,7 @@ class TestInstall:
             pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
 
         if "win32" in sys.platform:
-            pip_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\pip'
+            pip_with_venv = f' {venv_path}\\Scripts\\activate && pip'
 
         backend_name = 'tensorflow' if backend == 'tf' else backend
         subprocess.check_call(
