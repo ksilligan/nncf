@@ -78,11 +78,11 @@ def create_venv_with_nncf(tmp_path: Path, package_type: str, venv_type: str, ext
     if package_type == 'pip_pypi':
         run_cmd_line = f'{pip_with_venv} install nncf[{extra_reqs_str}]'
     elif package_type == 'pip_local':
-        run_cmd_line = f'{pip_with_venv} install {PROJECT_ROOT}[{extra_reqs_str}]'
+        run_cmd_line = f'{pip_with_venv} install -e {PROJECT_ROOT}[{extra_reqs_str}]'
     elif package_type == 'pip_e_local':
         run_cmd_line = f'{pip_with_venv} install -e {PROJECT_ROOT}[{extra_reqs_str}]'
     elif package_type == 'pip_git_develop':
-        run_cmd_line = f'{pip_with_venv} install git+{GITHUB_REPO_URL}@develop#egg=nncf[{extra_reqs_str}]'
+        run_cmd_line = f'{pip_with_venv} install -e git+{GITHUB_REPO_URL}@develop#egg=nncf[{extra_reqs_str}]'
     elif package_type == 'build_s':
         run_cmd_line = f'{python_executable_with_venv} -m build -s'
     elif package_type == 'build_w':
