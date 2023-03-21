@@ -126,8 +126,14 @@ class TestInstall:
         if backend == 'torch' and 'pypi' in package_type:
             pytest.xfail('Disabled until NNCF with torch version supporting CUDA 11.6 backend is exposed in a release')
         venv_path = create_venv_with_nncf(tmp_path, package_type, venv_type, extra_reqs={backend})
-        pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
-        backend_name = 'tensorflow' if backend == 'tf' else backend            
+
+        if "linux" in sys.platform:
+            pip_with_venv = f'. {venv_path}/bin/activate && {venv_path}/bin/pip'
+
+        if "win32" in sys.platform:
+            pip_with_venv = f' {venv_path}\\Scripts\\activate && {venv_path}\\Scripts\\pip'
+
+        backend_name = 'tensorflow' if backend == 'tf' else backend
         subprocess.check_call(
             f'{pip_with_venv} install -r {PROJECT_ROOT}/tests/{backend_name}/requirements.txt',
             shell=True)
