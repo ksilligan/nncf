@@ -69,7 +69,11 @@ class ExtensionNamespace:
         """
         if self._loaded_namespace is None:
             with extension_is_loading_info_log(self._loader.name()):
-                self._loaded_namespace = self._loader.load()
+                try:
+                  self._loaded_namespace = self._loader.load()
+                except:
+                  print("An exception occurred")
+
         return getattr(self._loaded_namespace, fn_name)
 
 
