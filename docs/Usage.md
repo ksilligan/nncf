@@ -9,7 +9,7 @@ As an alternative, you can always use the NNCF internal objects and methods as d
 
 ## Basic usage
 
-#### Step 1: Create an NNCF configuration file
+#### Step 1: Create an NNCF configuration fileasd
 
 A JSON configuration file is used for easier setup of the parameters of compression to be applied to your model.
 See [configuration file description](./ConfigFile.md) or the sample configuration files packaged with the [example scripts](../examples) for reference.
