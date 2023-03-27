@@ -36,7 +36,7 @@ For the [ImageNet](http://www.image-net.org/challenges/LSVRC/2012/) dataset, TFD
 The TFDS ImageNet dataset should be specified in the configuration file as follows:
 ```json
     "dataset": "imagenet2012",
-    "dataset_type": "tfds"
+    "dataset_type": "tfds123"
 ```
 
 #### Legacy TFRecords
