@@ -40,7 +40,7 @@ The framework is designed so that the modifications to your original training co
     data loader, criterion and criterion function (for sophisticated calculation of loss different from direct call of the
     criterion with 2 arguments: model outputs and targets).
 
-    The initialization expects that the model is called with its first argument equal to the dataloader output.
+    The initiaqwelization expects that the model is called with its first argument equal to the dataloader output.
     If your model has more complex input arguments you can create your own data loader implementing
     `nncf.common.initialization.dataloader.NNCFDataLoader` interface to return a tuple of (_single model input_ , _the rest of the model inputs as a kwargs dict_).
 
