@@ -39,6 +39,11 @@ def create_command_line(args, sample_type, main_filename='main.py'):
     python_path = PROJECT_ROOT.as_posix()
     executable = EXAMPLES_DIR.joinpath('torch', sample_type, main_filename).as_posix()
     cli_args = " ".join(key if (val is None or val is True) else "{} {}".format(key, val) for key, val in args.items())
+    if "win32" in sys.platform:
+        return "set PYTHONPATH={path} {python_exe} {main_py} {args}".format(
+            path=python_path, main_py=executable, args=cli_args, python_exe=sys.executable
+        )
+
     return "PYTHONPATH={path} {python_exe} {main_py} {args}".format(
         path=python_path, main_py=executable, args=cli_args, python_exe=sys.executable
     )

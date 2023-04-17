@@ -4,6 +4,8 @@ import pytest
 import pathlib
 import shutil
 
+import sys
+
 import torch
 
 from tests.shared.paths import TEST_ROOT
@@ -34,9 +36,14 @@ def test_force_cuda_build(tmp_path):
             pytest.skip('There is no CUDA on the machine. The test will be skipped')
 
     torch_build_dir = tmp_path / 'extensions'
-    export_env_variables = "export CUDA_VISIBLE_DEVICES='' export TORCH_EXTENSIONS_DIR={}".format(torch_build_dir)
 
-    python_executable_with_venv = ". {0}/bin/activate && {1} && {0}/bin/python".format(venv_path, export_env_variables)
+    if "linux" in sys.platform:
+        export_env_variables = "export CUDA_VISIBLE_DEVICES='' export TORCH_EXTENSIONS_DIR={}".format(torch_build_dir)
+        python_executable_with_venv = ". {0}/bin/activate && {1} && {0}/bin/python".format(venv_path, export_env_variables)
+
+    if "win32" in sys.platform:
+        export_env_variables = "set CUDA_VISIBLE_DEVICES='' set TORCH_EXTENSIONS_DIR={}".format(torch_build_dir)
+        python_executable_with_venv = ". {0}\\Scripts\\activate && {1} && python".format(venv_path, export_env_variables)
 
     run_path = tmp_path / 'run'
 

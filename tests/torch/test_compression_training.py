@@ -77,6 +77,12 @@ class CompressionTrainingValidator(BaseSampleValidator):
         executable = self._sample_handler.get_executable()
         cli_args = " ".join(
             key if (val is None or val is True) else "{} {}".format(key, val) for key, val in args.items())
+
+        if "win32" in sys.platform:
+            return "set PYTHONPATH={path} {python_exe} {main_py} {args}".format(
+                path=python_path, main_py=executable, args=cli_args, python_exe=sys.executable
+            )
+
         return "PYTHONPATH={path} {python_exe} {main_py} {args}".format(
             path=python_path, main_py=executable, args=cli_args, python_exe=sys.executable
         )
