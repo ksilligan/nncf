@@ -29,7 +29,7 @@
 # PyPA in general recommends to move away from setup.py and use pyproject.toml
 # instead. This doesn't fit us as we currently want to do custom stuff during
 # installation such as setting version based on the commit SHA for repo-based
-# installs.
+# installs.123
 
 
 import codecs
