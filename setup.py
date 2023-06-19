@@ -30,7 +30,6 @@
 # instead. This doesn't fit us as we currently want to do custom stuff during
 # installation such as setting version based on the commit SHA for repo-based
 # installs.
-# test
 
 
 import codecs
