@@ -1,6 +1,6 @@
 <div align="center">
 
-# Neural Network Compression Framework (NNCF)
+# Neural Network Compression Framework (NNCF)123
 
 [Key Features](#key-features) •
 [Installation](#installation-guide) •
