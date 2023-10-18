@@ -2,7 +2,7 @@
 
 # Neural Network Compression Framework (NNCF)
 
-[Key Features](#key-features) •
+[Key Features](#key-features •
 [Installation](#installation-guide) •
 [Documentation](#documentation) •
 [Usage](#usage) •
