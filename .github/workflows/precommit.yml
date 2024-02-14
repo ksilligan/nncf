@@ -3,7 +3,7 @@ name: precommit
 on:
   pull_request:
     types:
-      - opened
+      - labeled
       - reopened
       - synchronize
 
