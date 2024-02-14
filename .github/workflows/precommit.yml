@@ -3,13 +3,14 @@ name: precommit
 on:
   pull_request:
     types:
-      - opened
+      - labeled
       - reopened
       - synchronize
 
 jobs:
   common:
     runs-on: ubuntu-20.04
+    if: github.event.label.name != 'documentation'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -36,6 +37,7 @@ jobs:
           flags: COMMON
   onnx:
     runs-on: ubuntu-20.04
+    if: github.event.label.name != 'documentation'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -62,6 +64,7 @@ jobs:
           flags: ONNX
   openvino:
     runs-on: ubuntu-20.04
+    if: github.event.label.name != 'documentation'
     steps:
       - uses: actions/checkout@v3
         with:
