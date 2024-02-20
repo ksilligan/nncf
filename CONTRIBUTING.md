@@ -1,4 +1,4 @@
-# Contributing to NNCF
+# Contributing to NNCFtest
 
 Contributions are accepted in the form of:
 
