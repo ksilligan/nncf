@@ -85,8 +85,13 @@ def fixture_wc_reference_data():
         data = yaml.safe_load(f)
         fp32_test_cases = defaultdict(dict)
         for test_case_name in data:
-            model_name = test_case_name.split("_backend_")[0]
-            fp32_test_cases[f"{model_name}_backend_FP32"]["metric_value"] = 1
+            if "atol" not in data[test_case_name]:
+                data[test_case_name]["atol"] = 1e-5
+            reported_name = test_case_name.split("_backend_")[0]
+            fp32_case_name = f"{reported_name}_backend_FP32"
+            fp32_test_cases[fp32_case_name]["metric_value"] = 1
+            if "atol" not in fp32_test_cases[fp32_case_name]:
+                fp32_test_cases[fp32_case_name]["atol"] = 1e-10
         data.update(fp32_test_cases)
     return data
 
@@ -260,7 +265,7 @@ def test_weight_compression(
     start_time = time.perf_counter()
     try:
         if test_case_name not in wc_reference_data:
-            raise RuntimeError(f"{test_case_name} does not exist in 'reference_data.yaml'")
+            raise RuntimeError(f"{test_case_name} is not defined in `wc_reference_data` fixture")
         test_model_param = WC_TEST_CASES[test_case_name]
         maybe_skip_test_case(test_model_param, run_fp32_backend, run_torch_cuda_backend)
         pipeline_cls = test_model_param["pipeline_cls"]
@@ -273,10 +278,9 @@ def test_weight_compression(
     except Exception as e:
         err_msg = str(e)
         traceback.print_exc()
-    finally:
-        pipeline.cleanup_cache()
 
     if pipeline is not None:
+        pipeline.cleanup_cache()
         run_info = pipeline.run_info
         if err_msg:
             run_info.status = f"{run_info.status} | {err_msg}" if run_info.status else err_msg

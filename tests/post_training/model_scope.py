@@ -227,11 +227,11 @@ QUANTIZATION_MODELS = [
         "reported_name": "timm/swin_base_patch4_window7_224_no_sq",
         "model_id": "swin_base_patch4_window7_224",
         "pipeline_cls": ImageClassificationTimm,
-        "ptq_params": {
+        "compression_params": {
             "preset": QuantizationPreset.MIXED,
             "model_type": ModelType.TRANSFORMER,
             "advanced_parameters": AdvancedQuantizationParameters(
-                smooth_quant_alpha=AdvancedSmoothQuantParameters(matmul=-1)
+                smooth_quant_alphas=AdvancedSmoothQuantParameters(matmul=-1)
             ),
         },
         "backends": [BackendType.TORCH, BackendType.CUDA_TORCH, BackendType.ONNX],
@@ -301,6 +301,14 @@ WEIGHT_COMPRESSION_MODELS = [
         "compression_params": {"group_size": 64, "ratio": 0.8, "mode": CompressWeightsMode.INT4_SYM, "awq": True},
         "backends": [BackendType.OV],
     },
+    {
+        "reported_name": "tinyllama_data_aware_awq_stateful",
+        "model_id": "tinyllama/tinyllama-1.1b-step-50k-105b",
+        "pipeline_cls": LMWeightCompression,
+        "compression_params": {"group_size": 64, "ratio": 0.8, "mode": CompressWeightsMode.INT4_SYM, "awq": True},
+        "params": {"is_stateful": True},
+        "backends": [BackendType.OV],
+    },
 ]
 
 
@@ -308,11 +316,20 @@ def generate_tests_scope(models_list: List[Dict]) -> Dict[str, dict]:
     """
     Generate tests by names "{reported_name}_backend_{backend}"
     """
+    reported_name_to_model_id_mapping = {mc["reported_name"]: mc["model_id"] for mc in models_list}
     tests_scope = {}
+    fp32_models = set()
     for test_model_param in models_list:
         for backend in test_model_param["backends"] + [BackendType.FP32]:
             model_param = copy.deepcopy(test_model_param)
             reported_name = model_param["reported_name"]
+            model_id = reported_name_to_model_id_mapping[reported_name]
+            if backend == BackendType.FP32:
+                # Some test cases may share the same model_id, therefore fp32 test case is added only once for model_id.
+                if model_id not in fp32_models:
+                    fp32_models.add(model_id)
+                else:
+                    continue
             test_case_name = f"{reported_name}_backend_{backend.value}"
             model_param["backend"] = backend
             model_param.pop("backends")
